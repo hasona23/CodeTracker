@@ -1,3 +1,4 @@
+using System.Globalization;
 using CodeTrackerLibrary;
 
 namespace CodeTracker;
@@ -9,13 +10,25 @@ public class Input
         DateTime day = GetDay();
         DateTime startTime = GetStartTime(day);
         DateTime endTime = GetEndTime(day,startTime);
-        CodingSession codingSession = new CodingSession(startTime,endTime);
+        CodingSession codingSession = new CodingSession(startTime,endTime,GetDescription());
         Console.WriteLine($"Session Details: {codingSession}");
         Console.WriteLine("press enter to continue...");
         Console.ReadLine();
         return codingSession;
     }
 
+    public string GetDescription()
+    {
+        string description = "";
+        Console.WriteLine("Please enter a description : (language , task , project name)");
+        do
+        {
+            description = Console.ReadLine();
+           
+        }while(String.IsNullOrEmpty(description));
+        return description;
+    }
+    
     public DateTime GetEndTime(DateTime day , DateTime startTime)
     {
         DateTime endTime;
@@ -44,10 +57,32 @@ public class Input
         {
             var readline = Console.ReadLine();
             DateTime.TryParse(readline, out startTime);
-        } while (startTime > DateTime.Now || startTime <= DateTime.MinValue );
+        } while ((startTime > DateTime.Now && day.Date == DateTime.Today) || startTime <= DateTime.MinValue );
         startTime = new DateTime(day.Year, day.Month, day.Day, startTime.Hour, startTime.Minute, startTime.Second);
         Console.WriteLine(startTime.ToString("g"));
         return startTime;
+    }
+
+    public DateTime GetOptionalDate()
+    {
+        
+        DateTime date;
+                    
+        do
+        {
+            var readLine = Console.ReadLine();
+            if (String.IsNullOrEmpty(readLine))
+            {
+                date = DateTime.MinValue;
+                break;
+            }
+            if (DateTime.TryParseExact(readLine,CodingSession.DayFormat,CultureInfo.InvariantCulture,DateTimeStyles.None,out date))
+            {
+                break;
+            }
+        } while (true);
+
+        return date;
     }
     public DateTime GetDay()
     {
@@ -59,9 +94,14 @@ public class Input
             if (String.IsNullOrEmpty(readline))
                 day = DateTime.Today;
             else
-                DateTime.TryParse(readline, out day);
+                DateTime.TryParseExact(readline, "d-M-yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out day);
         } while (day <= DateTime.MinValue || day > DateTime.Now);
 
+        Console.WriteLine(day.ToString(CodingSession.DayFormat));
+        Console.ReadLine();
         return day;
     }
+
+   
+    
 }

@@ -17,7 +17,7 @@ public static class Menu
         Console.WriteLine("====================================================================");
         Console.WriteLine("====================== Welcome to CodeTracker ======================");
         Console.WriteLine("====================================================================");
-        Console.WriteLine("press enter to continue...");
+        Console.WriteLine("\npress enter to continue...");
         Console.ReadLine();
     }
     public static void DisplayOptions()
