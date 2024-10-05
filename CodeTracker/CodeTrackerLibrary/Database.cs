@@ -6,16 +6,16 @@ namespace CodeTrackerLibrary;
 
 public static class Database
 {
-    private static string _connectionString { get; set; }
+    private static string connectionString  = string.Empty;
 
     public static void InitializeDatabase()
     {
      
         XDocument config = XDocument.Load("config.xml");
        
-        _connectionString = config.Element("configuration").Element("database").Element("connectionString").Value;
+        connectionString = config.Element("configuration").Element("database").Element("connectionString").Value;
         //Initialisation logic
-        using (var connection = new SqliteConnection(_connectionString))
+        using (var connection = new SqliteConnection(connectionString))
         {
             
             connection.Open();
@@ -32,7 +32,7 @@ public static class Database
 
     public static void AddCodingSession(CodingSession codingSession)
     {
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
         string command = @"INSERT INTO CodingSessions(Date,StartTime,EndTime,Duration,Description) 
             VALUES (@Date, @StartTime, @EndTime, @Duration,@Description)";
@@ -50,7 +50,7 @@ public static class Database
     public static List<CodingSession> GetCodingSessionRecord(CodingSession sessionDetails)
     {
         var codingSessions = new List<CodingSession>();
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
         string command = @"SELECT Date, StartTime, EndTime, Description FROM CodingSessions ";
         if (sessionDetails.StartTime != DateTime.MinValue)
@@ -74,7 +74,7 @@ public static class Database
 
     public static void DeleteCodingSession(CodingSession codingSession)
     {
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
         string command = @"DELETE FROM CodingSessions WHERE Date = @Date AND Description LIKE  @Description";
         int deletions = connection.Execute(command,new {Date = codingSession.StartTime.ToString(CodingSession.DayFormat), Description =
@@ -85,7 +85,7 @@ public static class Database
 
     public static void UpdateCodingSession(CodingSession oldSession , CodingSession newSession)
     {
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
         string command = @"UPDATE CodingSessions SET Date = @Date , Description = @Description WHERE Date = @oldDate AND Description LIKE @oldDescription";
         var parameters = new {Date = newSession.StartTime.ToString(CodingSession.DayFormat), Description = newSession.Description, oldDate = oldSession.StartTime.ToString(CodingSession.DayFormat), oldDescription = $"%{oldSession.Description}%" };

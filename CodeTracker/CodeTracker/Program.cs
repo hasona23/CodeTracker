@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace CodeTracker;
+﻿namespace CodeTracker;
 using CodeTrackerLibrary;
 class Program
 {
