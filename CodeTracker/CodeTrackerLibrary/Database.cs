@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Dapper;
 using Microsoft.Data.Sqlite;
 
@@ -9,11 +10,14 @@ public static class Database
 
     public static void InitializeDatabase()
     {
+     
+        XDocument config = XDocument.Load("config.xml");
        
-        _connectionString = $"DataSource=CodingTracker.db";
+        _connectionString = config.Element("configuration").Element("database").Element("connectionString").Value;
         //Initialisation logic
         using (var connection = new SqliteConnection(_connectionString))
         {
+            
             connection.Open();
             string createTable = @"CREATE TABLE IF NOT EXISTS CodingSessions (
         Id INTEGER PRIMARY KEY AUTOINCREMENT, 
