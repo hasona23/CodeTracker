@@ -24,6 +24,8 @@ public class Input
         do
         {
             description = Console.ReadLine();
+            if(String.IsNullOrEmpty(description))
+                Console.WriteLine("Invalid : consist of whitespaces or empty");
            
         }while(String.IsNullOrEmpty(description));
         return description;
@@ -40,7 +42,9 @@ public class Input
                 endTime = DateTime.Now;
             else
             {
-                DateTime.TryParse(readline, out endTime);
+                var success = DateTime.TryParse(readline, out endTime);
+                if (!success)
+                    Console.WriteLine("Invalid Format . pls check format is HH:MM and make sure it is not before the start date");
             }
             endTime = new DateTime(day.Year, day.Month, day.Day, endTime.Hour, endTime.Minute, endTime.Second);
 
@@ -56,7 +60,9 @@ public class Input
         do
         {
             var readline = Console.ReadLine();
-            DateTime.TryParse(readline, out startTime);
+            var success = DateTime.TryParse(readline, out startTime);
+            if (!success)
+                Console.WriteLine("Pls make sure the format is correct");
         } while ((startTime > DateTime.Now && day.Date == DateTime.Today) || startTime <= DateTime.MinValue );
         startTime = new DateTime(day.Year, day.Month, day.Day, startTime.Hour, startTime.Minute, startTime.Second);
         Console.WriteLine(startTime.ToString("g"));
@@ -76,9 +82,15 @@ public class Input
                 date = DateTime.MinValue;
                 break;
             }
-            if (DateTime.TryParseExact(readLine,CodingSession.DayFormat,CultureInfo.InvariantCulture,DateTimeStyles.None,out date))
+
+            if (DateTime.TryParseExact(readLine, CodingSession.DayFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
             {
+
                 break;
+            }
+            else
+            {
+                Console.WriteLine($"It appears that format is incorrect pls enter correct format {CodingSession.DayFormat} or press enter to skip");
             }
         } while (true);
 

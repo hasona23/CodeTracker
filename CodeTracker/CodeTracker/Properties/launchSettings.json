@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CodeTracker": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\C#\\cli\\New folder\\CodeTracker\\CodeTracker"
+    }
+  }
+}
