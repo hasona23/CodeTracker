@@ -48,14 +48,11 @@ public class Input
             if (endTime.Hour < startTime.Hour)
             {
                 endTime = new DateTime(day.Year, day.Month, day.Day+1, endTime.Hour, endTime.Minute, endTime.Second);
-
-                Console.WriteLine($"{endTime}");
             }
 
         } while (endTime <= startTime);
         
-        Console.WriteLine(endTime.ToString("g"));
-        return endTime;
+         return endTime;
     }
     public DateTime GetStartTime(DateTime day)
     {
@@ -69,8 +66,7 @@ public class Input
                 Console.WriteLine("please make sure the format is correct");
         } while ((startTime > DateTime.Now && day.Date == DateTime.Today) || startTime <= DateTime.MinValue );
         startTime = new DateTime(day.Year, day.Month, day.Day, startTime.Hour, startTime.Minute, startTime.Second);
-        Console.WriteLine(startTime.ToString("g"));
-        return startTime;
+          return startTime;
     }
     public DateTime GetFullDate()
     {
@@ -139,8 +135,6 @@ public class Input
                 DateTime.TryParseExact(readline, "d-M-yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out day);
         } while (day <= DateTime.MinValue || day > DateTime.Now);
 
-        Console.WriteLine(day.ToString(CodingSession.DayFormat));
-        Console.ReadLine();
         return day;
     }
 
