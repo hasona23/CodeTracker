@@ -91,6 +91,8 @@ public static class Database
         var parameters = new {Date = newSession.StartTime.ToString(CodingSession.DayFormat), Description = newSession.Description, oldDate = oldSession.StartTime.ToString(CodingSession.DayFormat), oldDescription = $"%{oldSession.Description}%" };
         int updatedRecodsAmount = connection.Execute(command, parameters);
         Console.WriteLine($"Updated {updatedRecodsAmount} records");
+        if ( updatedRecodsAmount == 0 )
+            Console.WriteLine($"No Records Updated mean No entry was found with Details : {oldSession}");
         Console.ReadLine();
         
     }

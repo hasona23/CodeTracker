@@ -46,17 +46,22 @@ class Program
                         description = Console.ReadLine();
                     } while (String.IsNullOrEmpty(description));
                     sessionDetails = new CodingSession(date,date,description);
-                    Console.WriteLine($"{sessionDetails.StartTime.ToString(CodingSession.DayFormat)} - {sessionDetails.Description}");
-                    Console.WriteLine("press enter to continue...");
-                    Console.ReadLine();
+                    Console.WriteLine($"Looking for ->{sessionDetails.StartTime.ToString(CodingSession.DayFormat)} - {sessionDetails.Description}");
+                    if (Database.GetCodingSessionRecord(sessionDetails).Count == 0)
+                    {
+                        Console.WriteLine($"no entries were found");
+                        Console.WriteLine("press enter to continue...");
+                        Console.ReadLine();
+                    }
+                   
                     Database.DeleteCodingSession(sessionDetails);
                     break;
                 case Options.UpdateSession:
-                    Console.WriteLine("--Update Session --");
+                    Console.WriteLine("--Update Session--");
                     Console.WriteLine("Enter date D-M-YYYY");
                     do
                     {
-                        date = inputManager.GetOptionalDate();
+                        date = inputManager.GetFullDate();
                     } while (date == DateTime.MinValue);
                     Console.WriteLine("Enter Description keywords(language or name of project)");
                     do
@@ -64,14 +69,19 @@ class Program
                         description = Console.ReadLine();
                     } while (String.IsNullOrEmpty(description));
                     sessionDetails = new CodingSession(date,date,description);
-                    Console.WriteLine($"Old Session :{sessionDetails.StartTime.ToString(CodingSession.DayFormat)} - {sessionDetails.Description}");
-                    Console.WriteLine("press enter to continue...");
-                    Console.ReadLine();
+                    Console.WriteLine($"Looking For :{sessionDetails.StartTime.ToString(CodingSession.DayFormat)} - {sessionDetails.Description}");
+                    if (Database.GetCodingSessionRecord(sessionDetails).Count == 0)
+                    {
+                        Console.WriteLine("No entires were found ");
+                        Console.WriteLine("press enter to continue...");
+                        Console.ReadLine();
+                        break;
+                    }
                     DateTime newDate;
                     Console.WriteLine("Enter new date D-M-YYYY");
                     do
                     {
-                        newDate = inputManager.GetOptionalDate();
+                        newDate = inputManager.GetFullDate();
                     } while (newDate == DateTime.MinValue);
                     Console.WriteLine("Enter new Description ");
                     string newDescription;

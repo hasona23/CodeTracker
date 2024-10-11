@@ -43,12 +43,16 @@ public class Input
             else
             {
                 var success = DateTime.TryParse(readline, out endTime);
-                if (!success)
-                    Console.WriteLine("Invalid Format . pls check format is HH:MM and make sure it is not before the start date");
             }
             endTime = new DateTime(day.Year, day.Month, day.Day, endTime.Hour, endTime.Minute, endTime.Second);
+            if (endTime.Hour < startTime.Hour)
+            {
+                endTime = new DateTime(day.Year, day.Month, day.Day+1, endTime.Hour, endTime.Minute, endTime.Second);
 
-        } while (endTime > DateTime.Now || endTime <= startTime || (endTime.Date - startTime.Date).Days >= 1);
+                Console.WriteLine($"{endTime}");
+            }
+
+        } while (endTime <= startTime);
         
         Console.WriteLine(endTime.ToString("g"));
         return endTime;
@@ -62,13 +66,39 @@ public class Input
             var readline = Console.ReadLine();
             var success = DateTime.TryParse(readline, out startTime);
             if (!success)
-                Console.WriteLine("Pls make sure the format is correct");
+                Console.WriteLine("please make sure the format is correct");
         } while ((startTime > DateTime.Now && day.Date == DateTime.Today) || startTime <= DateTime.MinValue );
         startTime = new DateTime(day.Year, day.Month, day.Day, startTime.Hour, startTime.Minute, startTime.Second);
         Console.WriteLine(startTime.ToString("g"));
         return startTime;
     }
+    public DateTime GetFullDate()
+    {
 
+        DateTime date;
+
+        do
+        {
+            var readLine = Console.ReadLine();
+            if (String.IsNullOrEmpty(readLine))
+            {
+                date = DateTime.MinValue;
+                break;
+            }
+
+            if (DateTime.TryParseExact(readLine, CodingSession.DayFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+            {
+
+                break;
+            }
+            else
+            {
+                Console.WriteLine($"It appears that format is incorrect please enter correct format {CodingSession.DayFormat}");
+            }
+        } while (true);
+
+        return date;
+    }
     public DateTime GetOptionalDate()
     {
         
@@ -90,7 +120,7 @@ public class Input
             }
             else
             {
-                Console.WriteLine($"It appears that format is incorrect pls enter correct format {CodingSession.DayFormat} or press enter to skip");
+                Console.WriteLine($"It appears that format is incorrect please enter correct format {CodingSession.DayFormat} or press enter to skip");
             }
         } while (true);
 

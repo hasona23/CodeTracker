@@ -24,6 +24,10 @@ public class CodingSession
            DateTime day = DateTime.ParseExact(date,DayFormat,System.Globalization.CultureInfo.CurrentCulture);
            StartTime = new DateTime(day.Year, day.Month, day.Day, StartTime.Hour, StartTime.Minute, StartTime.Second);
            EndTime = new DateTime(day.Year, day.Month, day.Day, EndTime.Hour, EndTime.Minute, EndTime.Second);
+           if(EndTime.Hour <= StartTime.Hour)
+           {
+                EndTime = EndTime.AddDays(1);
+           }
            Description = description;
     }
     public TimeSpan Duration()
