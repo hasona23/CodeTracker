@@ -42,7 +42,7 @@ public class Input
                 endTime = DateTime.Now;
             else
             {
-                var success = DateTime.TryParse(readline, out endTime);
+                DateTime.TryParse(readline, out endTime);
             }
             endTime = new DateTime(day.Year, day.Month, day.Day, endTime.Hour, endTime.Minute, endTime.Second);
             if (endTime.Hour < startTime.Hour)
