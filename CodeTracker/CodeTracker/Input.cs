@@ -1,10 +1,16 @@
 using System.Globalization;
 using CodeTrackerLibrary;
+using Spectre.Console;
 
 namespace CodeTracker;
 
 public class Input
 {
+    private readonly IAnsiConsole _console;
+    public Input(IAnsiConsole? console = null)
+    {
+        _console = console ?? AnsiConsole.Console;
+    }
     public CodingSession GetCodingSession()
     {
         DateTime day = GetDay();
@@ -19,15 +25,7 @@ public class Input
 
     public string GetDescription()
     {
-        string description = "";
-        Console.WriteLine("Please enter a description : (language , task , project name)");
-        do
-        {
-            description = Console.ReadLine();
-            if(String.IsNullOrEmpty(description))
-                Console.WriteLine("Invalid : consist of whitespaces or empty");
-           
-        }while(String.IsNullOrEmpty(description));
+        string description =  _console.Prompt(new TextPrompt<string>("Enter description (Language, Task, Project):"));
         return description;
     }
     
@@ -38,7 +36,7 @@ public class Input
         do
         {
             var readline = Console.ReadLine();
-            if (String.IsNullOrWhiteSpace(readline))
+            if (String.IsNullOrEmpty(readline))
                 endTime = DateTime.Now;
             else
             {
@@ -130,9 +128,14 @@ public class Input
         {
             var readline = Console.ReadLine();
             if (String.IsNullOrEmpty(readline))
+            {
                 day = DateTime.Today;
-            else
-                DateTime.TryParseExact(readline, "d-M-yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out day);
+                break;
+            }
+
+            bool success = DateTime.TryParseExact(readline, "d-M-yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out day);
+            if (!success)
+                day = DateTime.MinValue;
         } while (day <= DateTime.MinValue || day > DateTime.Now);
 
         return day;

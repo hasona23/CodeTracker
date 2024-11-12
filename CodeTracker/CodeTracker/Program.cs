@@ -3,7 +3,7 @@ using CodeTrackerLibrary;
 class Program
 {
     static void Main()
-    { 
+    {
         Database.InitializeDatabase();
         Menu.Greeting();
         bool isRunning = true;
